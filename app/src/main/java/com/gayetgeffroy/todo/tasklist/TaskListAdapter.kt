@@ -1,18 +1,12 @@
 package com.gayetgeffroy.todo.tasklist
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.gayetgeffroy.todo.R
-import com.gayetgeffroy.todo.databinding.FragmentTaskListBinding
 import com.gayetgeffroy.todo.databinding.ItemTaskBinding
-import kotlin.math.log
 
 // l'IDE va râler ici car on a pas encore implémenté les méthodes nécessaires
 class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDiffCallback) {
@@ -38,6 +32,9 @@ class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskLi
             binding.taskTitle.text = it.title
             binding.taskDescription.text = it.description
 
+            binding.taskItem.setOnLongClickListener {
+                listener.onLongClickShare(getItem(position))
+                true }
             binding.deleteButton.setOnClickListener(View.OnClickListener {
                 listener.onClickDelete(getItem(position))
             })

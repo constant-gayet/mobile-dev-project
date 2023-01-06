@@ -2,7 +2,6 @@ package com.gayetgeffroy.todo.tasklist
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,8 +27,18 @@ class TaskListFragment : Fragment() {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("task",task)
             editTask.launch(intent)
-
         }
+
+        override fun onLongClickShare(task: Task) {
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "${task.title}\n${task.description}")
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }
+
     }
 
     val adapter = TaskListAdapter(adapterListener)
@@ -58,8 +67,6 @@ class TaskListFragment : Fragment() {
             adapter.submitList(taskList);
         }
      }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
