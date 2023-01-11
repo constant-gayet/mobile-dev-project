@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.gayetgeffroy.todo.databinding.FragmentTaskListBinding
 import com.gayetgeffroy.todo.detail.DetailActivity
+import kotlinx.coroutines.launch
 
 // TODO: TP2.9 PARTAGER
 class TaskListFragment : Fragment() {
@@ -42,7 +45,7 @@ class TaskListFragment : Fragment() {
     }
 
     val adapter = TaskListAdapter(adapterListener)
-
+    private val viewModel: TaskListViewModel by viewModels()
 
     private var _binding: FragmentTaskListBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
@@ -81,6 +84,10 @@ class TaskListFragment : Fragment() {
         return binding.root;
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.mainRecyclerView.adapter = adapter;
         binding.addTaskBtn.setOnClickListener(View.OnClickListener {
@@ -89,7 +96,12 @@ class TaskListFragment : Fragment() {
             createTask.launch(intent)
 
         });
-
+        lifecycleScope.launch { // on lance une coroutine car `collect` est `suspend`
+            viewModel.tasksStateFlow.collect { newList ->
+                // cette lambda est executée à chaque fois que la liste est mise à jour dans le VM
+                // -> ici, on met à jour la liste dans l'adapter
+            }
+        }
         adapter.submitList(taskList);
     }
 
