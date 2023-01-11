@@ -7,6 +7,8 @@ import com.gayetgeffroy.todo.databinding.ActivityMainBinding
 import data.Api
 import kotlinx.coroutines.runBlocking
 
+
+// TODO: TP2.9 PARTAGER
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

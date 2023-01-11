@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 data class Task (
     @SerialName("id")
     val id : String,
-    @SerialName("title")
+    @SerialName("content")
     val title : String,
     @SerialName("description")
     val description : String = "Description by default",
