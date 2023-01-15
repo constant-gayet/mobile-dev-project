@@ -23,10 +23,9 @@ class MainActivity : AppCompatActivity() {
         getSupportActionBar()?.hide()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.userImageView.setOnClickListener(View.OnClickListener {
-            val userID = "hop"
             val intent = Intent(this, UserActivity::class.java)
-            intent.putExtra("userID", userID)
             startActivity(intent)
 
         })
