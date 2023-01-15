@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.gayetgeffroy.todo.databinding.ItemTaskBinding
 
-class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDiffCallback) {
+class TaskListAdapter(val listener: TaskListListener) :
+    ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TaskDiffCallback) {
 
     // on utilise `inner` ici afin d'avoir accès aux propriétés de l'adapter directement
-    inner class TaskViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TaskViewHolder(val binding: ItemTaskBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root.setOnClickListener{
+            binding.root.setOnClickListener {
                 //Deal with click feature later, show the list first
             }
         }
@@ -21,7 +23,7 @@ class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskLi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
 
-        val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskViewHolder(binding)
     }
 
@@ -33,7 +35,8 @@ class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskLi
 
             binding.taskItem.setOnLongClickListener {
                 listener.onLongClickShare(getItem(position))
-                true }
+                true
+            }
             binding.deleteButton.setOnClickListener(View.OnClickListener {
                 listener.onClickDelete(getItem(position))
             })
@@ -45,11 +48,11 @@ class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskLi
 }
 
 object TaskDiffCallback : DiffUtil.ItemCallback<Task>() {
-    override fun areItemsTheSame(oldItem: Task, newItem: Task) : Boolean {
+    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
         return oldItem.id == newItem.id // comparaison: est-ce la même "entité" ? => même id?
     }
 
-    override fun areContentsTheSame(oldItem: Task, newItem: Task) : Boolean {
+    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
         return oldItem == newItem // comparaison: est-ce le même "contenu" ? => mêmes valeurs? (avec data class: simple égalité)
     }
 }

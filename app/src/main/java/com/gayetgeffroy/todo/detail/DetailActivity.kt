@@ -1,6 +1,5 @@
 package com.gayetgeffroy.todo.detail
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.gayetgeffroy.todo.R
 import com.gayetgeffroy.todo.detail.ui.theme.TodoGayetGeffroyTheme
 import com.gayetgeffroy.todo.tasklist.Task
-import java.time.format.TextStyle
 import java.util.*
 
 class DetailActivity : ComponentActivity() {
@@ -34,11 +32,12 @@ class DetailActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     Detail(initialTask ?: receivedText?.let {
-                        Task(UUID.randomUUID().toString(),
+                        Task(
+                            UUID.randomUUID().toString(),
                             it
                         )
                     }, onValidate = {
-                        intent.putExtra("task",it)
+                        intent.putExtra("task", it)
                         setResult(RESULT_OK, intent)
                         finish()
                     })
@@ -51,24 +50,31 @@ class DetailActivity : ComponentActivity() {
 
 
 @Composable
-fun Detail(initialTask: Task?, onValidate : (task:Task) -> Unit) {
+fun Detail(initialTask: Task?, onValidate: (task: Task) -> Unit) {
 
-    Column(modifier = Modifier.padding(16.dp),Arrangement.spacedBy(16.dp)) {
-        val newTask = Task(UUID.randomUUID().toString(),"")
-        var task by remember { mutableStateOf(initialTask ?: newTask) } // faire les imports suggérés par l'IDE
-        OutlinedTextField(value = task.title, onValueChange= {
+    Column(modifier = Modifier.padding(16.dp), Arrangement.spacedBy(16.dp)) {
+        val newTask = Task(UUID.randomUUID().toString(), "")
+        var task by remember {
+            mutableStateOf(
+                initialTask ?: newTask
+            )
+        } // faire les imports suggérés par l'IDE
+        OutlinedTextField(value = task.title, onValueChange = {
             task = task.copy(title = it)
 
-        },label = { Text(text = "Enter a title") })
+        }, label = { Text(text = "Enter a title") })
 
-        OutlinedTextField(value = task.description, onValueChange= {
+        OutlinedTextField(value = task.description, onValueChange = {
             task = task.copy(description = it)
-        },label = { Text(text = "Enter a description") })
+        }, label = { Text(text = "Enter a description") })
 
         Button(onClick = {
             onValidate(task)
         }) {
-            Image(painter = painterResource(id = R.drawable.ic_baseline_done_24), contentDescription = "Done")
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_done_24),
+                contentDescription = "Done"
+            )
         }
     }
 

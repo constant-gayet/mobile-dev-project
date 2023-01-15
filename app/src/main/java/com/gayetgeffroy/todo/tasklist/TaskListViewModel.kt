@@ -20,7 +20,8 @@ class TaskListViewModel : ViewModel() {
                 return@launch
             }
             val fetchedTasks = response.body()!!
-            tasksStateFlow.value = fetchedTasks // on modifie le flow, ce qui déclenche ses observers
+            tasksStateFlow.value =
+                fetchedTasks // on modifie le flow, ce qui déclenche ses observers
         }
     }
 
@@ -45,7 +46,8 @@ class TaskListViewModel : ViewModel() {
             }
 
             val updatedTask = response.body()!!
-            tasksStateFlow.value = tasksStateFlow.value.map { if (it.id == updatedTask.id) updatedTask else it }
+            tasksStateFlow.value =
+                tasksStateFlow.value.map { if (it.id == updatedTask.id) updatedTask else it }
         }
     }
 

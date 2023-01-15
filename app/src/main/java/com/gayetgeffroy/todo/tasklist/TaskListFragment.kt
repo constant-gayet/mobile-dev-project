@@ -17,13 +17,14 @@ class TaskListFragment : Fragment() {
 
     private val viewModel: TaskListViewModel by viewModels()
 
-    val adapterListener : TaskListListener = object : TaskListListener {
+    val adapterListener: TaskListListener = object : TaskListListener {
         override fun onClickDelete(task: Task) {
             viewModel.remove(task)
         }
+
         override fun onClickEdit(task: Task) {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("task",task)
+            intent.putExtra("task", task)
             editTask.launch(intent)
         }
 
@@ -42,26 +43,29 @@ class TaskListFragment : Fragment() {
     val adapter = TaskListAdapter(adapterListener)
 
     private var _binding: FragmentTaskListBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
     //    Creating the launcher for task creation
-    val createTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        // dans cette callback on récupèrera la task et on l'ajoutera à la liste
-        val task = result.data?.getSerializableExtra("task") as Task?
-        if (task != null) {
-            viewModel.add(task)
+    val createTask =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // dans cette callback on récupèrera la task et on l'ajoutera à la liste
+            val task = result.data?.getSerializableExtra("task") as Task?
+            if (task != null) {
+                viewModel.add(task)
+            }
         }
-    }
 
     //    Creating the launcher for task edition
-    val editTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        // dans cette callback on récupèrera la task et on l'ajoutera à la liste
-        val task = result.data?.getSerializableExtra("task") as Task?
-        if (task != null) {
-            viewModel.edit(task)
+    val editTask =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // dans cette callback on récupèrera la task et on l'ajoutera à la liste
+            val task = result.data?.getSerializableExtra("task") as Task?
+            if (task != null) {
+                viewModel.edit(task)
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,12 +75,15 @@ class TaskListFragment : Fragment() {
         //}
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentTaskListBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root;
     }
-
 
 
     override fun onResume() {
@@ -85,11 +92,10 @@ class TaskListFragment : Fragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.mainRecyclerView.adapter = adapter
         binding.addTaskBtn.setOnClickListener(View.OnClickListener {
-           // Instanciation d'un objet task avec des données préremplies:
+            // Instanciation d'un objet task avec des données préremplies:
             val intent = Intent(context, DetailActivity::class.java)
             createTask.launch(intent)
 

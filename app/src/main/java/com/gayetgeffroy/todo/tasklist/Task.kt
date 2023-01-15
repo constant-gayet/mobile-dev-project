@@ -5,11 +5,11 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Task (
+data class Task(
     @SerialName("id")
-    val id : String,
+    val id: String,
     @SerialName("content")
-    val title : String,
+    val title: String,
     @SerialName("description")
-    val description : String = "Description by default",
-) : java.io.Serializable { }
+    val description: String = "Description by default",
+) : java.io.Serializable {}
