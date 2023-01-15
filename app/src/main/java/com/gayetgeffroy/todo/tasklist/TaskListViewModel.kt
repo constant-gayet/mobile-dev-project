@@ -51,12 +51,13 @@ class TaskListViewModel : ViewModel() {
 
     fun remove(task: Task) {
         viewModelScope.launch {
-            val response = webService.delete(task)
+            val response = webService.delete(task.id)
             if (!response.isSuccessful) {
                 Log.e("Network", "Error: ${response.message()}")
                 return@launch
             }
             tasksStateFlow.value = tasksStateFlow.value.filter { it.id != task.id }
+
         }
     }
 
