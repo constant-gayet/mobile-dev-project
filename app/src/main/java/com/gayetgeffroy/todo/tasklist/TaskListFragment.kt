@@ -13,7 +13,6 @@ import com.gayetgeffroy.todo.databinding.FragmentTaskListBinding
 import com.gayetgeffroy.todo.detail.DetailActivity
 import kotlinx.coroutines.launch
 
-// TODO: TP2.9 PARTAGER
 class TaskListFragment : Fragment() {
 
     private val viewModel: TaskListViewModel by viewModels()

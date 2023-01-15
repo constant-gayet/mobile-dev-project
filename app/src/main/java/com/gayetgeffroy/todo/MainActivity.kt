@@ -13,7 +13,6 @@ import data.Api
 import kotlinx.coroutines.runBlocking
 
 
-// TODO: TP2.9 PARTAGER
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -36,21 +35,7 @@ class MainActivity : AppCompatActivity() {
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 val receivedText = intent.getStringExtra(Intent.EXTRA_TEXT)
-                // Use the received text to pre-fill the form for creating a new task
-            }
-        }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-
-        val action = intent.action
-        val type = intent.type
-
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
-                val receivedText = intent.getStringExtra(Intent.EXTRA_TEXT)
-                // Use the received text to pre-fill the form for creating a new task
+                // send this data to tasklist fragment
             }
         }
     }
@@ -65,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                 imageView.load("https://goo.gl/gEgYUd")
 
             } catch (e: Exception) {
-                // handle error
             }
         }
     }

@@ -22,9 +22,9 @@ import java.time.format.TextStyle
 import java.util.*
 
 class DetailActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val receivedText = intent.getStringExtra("shared_text")
         val initialTask = intent.getSerializableExtra("task") as Task?
         setContent {
             TodoGayetGeffroyTheme {
@@ -33,7 +33,11 @@ class DetailActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Detail(initialTask, onValidate = {
+                    Detail(initialTask ?: receivedText?.let {
+                        Task(UUID.randomUUID().toString(),
+                            it
+                        )
+                    }, onValidate = {
                         intent.putExtra("task",it)
                         setResult(RESULT_OK, intent)
                         finish()
@@ -44,6 +48,7 @@ class DetailActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun Detail(initialTask: Task?, onValidate : (task:Task) -> Unit) {
