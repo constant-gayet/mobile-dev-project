@@ -47,10 +47,11 @@ class MainActivity : AppCompatActivity() {
                 val user = Api.userWebService.fetchUser().body()!!
                 binding.userTextView.text = user.name
                 var imageView = findViewById<ImageView>(R.id.user_image_view)
-                imageView.load("https://goo.gl/gEgYUd")
+                imageView.load(user.avatar)
 
             } catch (e: Exception) {
             }
         }
     }
+
 }

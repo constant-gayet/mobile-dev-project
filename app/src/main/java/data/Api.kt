@@ -6,6 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -56,13 +57,17 @@ data class User(
     val email: String,
     @SerialName("full_name")
     val name: String,
-    @SerialName("avatar_medium")
+    @SerialName("avatar_big")
     val avatar: String? = null
 )
 
     interface UserWebService {
         @GET("/sync/v9/user/")
         suspend fun fetchUser(): Response<User>
+
+        @Multipart
+        @POST("sync/v9/update_avatar")
+        suspend fun updateAvatar(@Part avatar: MultipartBody.Part): Response<User>
     }
 
     interface TasksWebService {

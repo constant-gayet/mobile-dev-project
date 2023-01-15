@@ -22,28 +22,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.gayetgeffroy.todo.user.ui.theme.TodoGayetGeffroyTheme
+import data.Api
+import kotlinx.coroutines.runBlocking
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 
 class UserActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
-            if (result != null) {
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
+                // Callback is invoked after the user selects a media item or closes the
+                // photo picker.
+                if (result != null) {
 //                uri = result
-            } else {
-                Log.d("PhotoPicker", "No media selected")
+                } else {
+                    Log.d("PhotoPicker", "No media selected")
+                }
             }
-        }
         setContent {
             var bitmap: Bitmap? by remember { mutableStateOf(null) }
             var uri: Uri? by remember { mutableStateOf(null) }
-            val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-                bitmap = it
-            }
-
+            val takePicture =
+                rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+                    bitmap = it
+                    runBlocking {
+                        try {
+                            bitmap?.let { it1 -> Api.userWebService.updateAvatar(it1.toRequestBody()) }
+                        } catch (e: Exception) {
+                        }
+                    }
+                }
             // Registers a photo picker activity launcher in single-select mode.
             TodoGayetGeffroyTheme {
                 // A surface container using the 'background' color from the theme
@@ -65,8 +76,12 @@ class UserActivity : ComponentActivity() {
                         )
                         Button(
                             onClick = {// Launch the photo picker and allow the user to choose only images.
-                               pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                                      },
+                                pickMedia.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                                    )
+                                )
+                            },
                             content = { Text("Pick photo") }
                         )
                     }
@@ -74,4 +89,16 @@ class UserActivity : ComponentActivity() {
             }
         }
     }
+}
+
+private fun Bitmap.toRequestBody(): MultipartBody.Part {
+    val tmpFile = File.createTempFile("avatar", "jpg")
+    tmpFile.outputStream().use { // *use* se charge de faire open et close
+        this.compress(Bitmap.CompressFormat.JPEG, 100, it) // *this* est le bitmap ici
+    }
+    return MultipartBody.Part.createFormData(
+        name = "avatar",
+        filename = "avatar.jpg",
+        body = tmpFile.readBytes().toRequestBody()
+    )
 }
