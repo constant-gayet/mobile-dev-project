@@ -23,8 +23,6 @@ import java.util.*
 
 class DetailActivity : ComponentActivity() {
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val initialTask = intent.getSerializableExtra("task") as Task?
