@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoGayetGeffroy">
         <activity
-            android:name=".UserActivity"
+            android:name=".user.UserActivity"
             android:exported="false"
             android:label="@string/title_activity_user"
             android:theme="@style/Theme.TodoGayetGeffroy">
